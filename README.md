@@ -151,6 +151,28 @@ Fetches a specific supporting file from within a skill directory.
 }
 ```
 
+## Usage with Claude Code
+
+Add a `CLAUDE.md` to any project with a `.cursor/` directory to tell Claude Code to use the bridge automatically. Here's a template:
+
+```markdown
+## Cursor Bridge MCP
+
+When the cursor-bridge MCP is connected, use it to read Cursor context files
+instead of reading .cursor/ files directly.
+
+- On session start, call `get_context_index` to discover available context
+- When working on files, call `get_active_rules` with current file paths and/or
+  a task description to get relevant rules with full content
+- Use `get_rule`, `get_agent`, `get_skill` to load specific items by name
+- Use `get_skill_file` to load supporting files from skill packages
+
+The bridge applies Cursor's activation logic (glob matching, always-apply,
+description relevance) so you get the right context automatically.
+```
+
+This way Claude Code knows to call the MCP tools rather than manually reading and interpreting `.cursor/` files. The bridge handles the routing logic — which rules apply, which don't — so the AI doesn't have to.
+
 ## Cursor Context Formats
 
 ### Rules (`.cursor/rules/`)
