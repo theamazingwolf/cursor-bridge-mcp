@@ -18,19 +18,13 @@ Cursor Bridge reads `.cursor/rules/`, `.cursor/agents/`, and `.cursor/skills/`, 
 
 ## Installation
 
-### Option 1: Install from npm (once published)
+### From npm
 
 ```bash
 npm install -g cursor-bridge-mcp
 ```
 
-### Option 2: Install from GitHub
-
-```bash
-npm install -g github:theamazingwolf/cursor-bridge-mcp
-```
-
-### Option 3: Clone and build locally
+### From source
 
 ```bash
 git clone https://github.com/theamazingwolf/cursor-bridge-mcp.git
@@ -39,6 +33,8 @@ npm install
 npm run build
 npm link
 ```
+
+This registers `cursor-bridge-mcp` as a global command on your PATH.
 
 ## MCP Configuration
 
