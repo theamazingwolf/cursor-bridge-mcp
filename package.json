@@ -1,6 +1,6 @@
 {
   "name": "cursor-bridge-mcp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "MCP server that bridges Cursor's context ecosystem (rules, agents, skills) to Claude Code and other MCP-compatible tools",
   "type": "module",
   "bin": {

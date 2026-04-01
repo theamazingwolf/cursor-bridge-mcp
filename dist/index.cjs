@@ -37616,19 +37616,21 @@ async function parseSkillFrontmatter(skillDir) {
     supportingFiles
   };
 }
-async function enumerateSupportingFiles(skillDir) {
-  const subdirs = ["scripts", "references", "assets"];
+async function enumerateSupportingFiles(skillDir, relativePrefix = "") {
   const files = [];
-  for (const subdir of subdirs) {
-    const dirPath = import_path4.default.join(skillDir, subdir);
-    try {
-      const entries = await (0, import_promises3.readdir)(dirPath, { withFileTypes: true });
-      for (const entry of entries) {
-        if (entry.isFile()) {
-          files.push(`${subdir}/${entry.name}`);
-        }
-      }
-    } catch {
+  let entries;
+  try {
+    entries = await (0, import_promises3.readdir)(import_path4.default.join(skillDir, relativePrefix), { withFileTypes: true });
+  } catch {
+    return files;
+  }
+  for (const entry of entries) {
+    const relativePath = relativePrefix ? `${relativePrefix}/${entry.name}` : entry.name;
+    if (entry.isFile() && entry.name !== "SKILL.md") {
+      files.push(relativePath);
+    } else if (entry.isDirectory()) {
+      const nested = await enumerateSupportingFiles(skillDir, relativePath);
+      files.push(...nested);
     }
   }
   return files;
@@ -39672,8 +39674,7 @@ function createServer(workspaceRoot) {
         result.skills = Array.from(index.skills.values()).map((s) => ({
           name: s.name,
           description: s.description,
-          has_scripts: s.supportingFiles.some((f) => f.startsWith("scripts/")),
-          has_references: s.supportingFiles.some((f) => f.startsWith("references/"))
+          supporting_files: s.supportingFiles
         }));
       }
       return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };

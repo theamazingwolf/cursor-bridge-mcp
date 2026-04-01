@@ -38,21 +38,27 @@ export async function parseSkillFrontmatter(skillDir: string): Promise<CursorSki
   };
 }
 
-async function enumerateSupportingFiles(skillDir: string): Promise<string[]> {
-  const subdirs = ['scripts', 'references', 'assets'];
+/**
+ * Recursively enumerate all files in the skill directory except SKILL.md itself.
+ * Returns paths relative to the skill directory.
+ */
+async function enumerateSupportingFiles(skillDir: string, relativePrefix = ''): Promise<string[]> {
   const files: string[] = [];
 
-  for (const subdir of subdirs) {
-    const dirPath = path.join(skillDir, subdir);
-    try {
-      const entries = await readdir(dirPath, { withFileTypes: true });
-      for (const entry of entries) {
-        if (entry.isFile()) {
-          files.push(`${subdir}/${entry.name}`);
-        }
-      }
-    } catch {
-      // Directory doesn't exist — that's fine
+  let entries;
+  try {
+    entries = await readdir(path.join(skillDir, relativePrefix), { withFileTypes: true });
+  } catch {
+    return files;
+  }
+
+  for (const entry of entries) {
+    const relativePath = relativePrefix ? `${relativePrefix}/${entry.name}` : entry.name;
+    if (entry.isFile() && entry.name !== 'SKILL.md') {
+      files.push(relativePath);
+    } else if (entry.isDirectory()) {
+      const nested = await enumerateSupportingFiles(skillDir, relativePath);
+      files.push(...nested);
     }
   }
 

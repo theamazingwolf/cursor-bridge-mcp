@@ -73,8 +73,7 @@ export function createServer(workspaceRoot: string) {
         result.skills = Array.from(index.skills.values()).map((s) => ({
           name: s.name,
           description: s.description,
-          has_scripts: s.supportingFiles.some((f) => f.startsWith('scripts/')),
-          has_references: s.supportingFiles.some((f) => f.startsWith('references/')),
+          supporting_files: s.supportingFiles,
         }));
       }
 

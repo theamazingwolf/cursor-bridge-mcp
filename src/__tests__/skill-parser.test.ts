@@ -16,6 +16,14 @@ describe('parseSkillFrontmatter', () => {
     expect(skill.supportingFiles).toContain('references/pdf-form-fields.md');
   });
 
+  it('enumerates files in any subdirectory (not just scripts/references/assets)', async () => {
+    const skill = await parseSkillFrontmatter(path.join(fixtures, 'with-guides'));
+    expect(skill.name).toBe('with-guides');
+    expect(skill.supportingFiles).toContain('guides/01-getting-started.md');
+    expect(skill.supportingFiles).toContain('guides/02-advanced.md');
+    expect(skill.supportingFiles).not.toContain('SKILL.md');
+  });
+
   it('parses skill without supporting files', async () => {
     const skill = await parseSkillFrontmatter(path.join(fixtures, 'data-analysis'));
     expect(skill.name).toBe('data-analysis');

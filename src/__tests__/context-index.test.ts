@@ -26,8 +26,8 @@ describe('buildIndex', () => {
     expect(index.agents.size).toBe(2);
     expect(index.agents.has('security-auditor')).toBe(true);
 
-    // Skills: pdf-processing, data-analysis
-    expect(index.skills.size).toBe(2);
+    // Skills: pdf-processing, data-analysis, with-guides
+    expect(index.skills.size).toBe(3);
     expect(index.skills.has('pdf-processing')).toBe(true);
   });
 

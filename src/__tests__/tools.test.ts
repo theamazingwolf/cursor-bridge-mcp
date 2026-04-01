@@ -56,17 +56,13 @@ describe('get_skill (logic)', () => {
     expect(skill.supportingFiles).toContain('references/pdf-form-fields.md');
   });
 
-  it('has_scripts and has_references derived correctly', async () => {
+  it('supporting files listed for skills with and without them', async () => {
     const index = await buildIndex(fixtureRoot, defaultConfig);
     const skill = index.skills.get('pdf-processing')!;
-    const hasScripts = skill.supportingFiles.some((f) => f.startsWith('scripts/'));
-    const hasRefs = skill.supportingFiles.some((f) => f.startsWith('references/'));
-    expect(hasScripts).toBe(true);
-    expect(hasRefs).toBe(true);
+    expect(skill.supportingFiles.length).toBeGreaterThan(0);
 
     const dataSkill = index.skills.get('data-analysis')!;
-    const dataHasScripts = dataSkill.supportingFiles.some((f) => f.startsWith('scripts/'));
-    expect(dataHasScripts).toBe(false);
+    expect(dataSkill.supportingFiles).toEqual([]);
   });
 });
 
