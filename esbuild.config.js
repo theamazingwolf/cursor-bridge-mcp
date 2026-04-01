@@ -7,6 +7,9 @@ await build({
   target: 'node18',
   format: 'cjs',
   outfile: 'dist/index.cjs',
+  banner: {
+    js: '#!/usr/bin/env node',
+  },
   // Bundle everything — zero runtime node_modules needed
   external: [],
 });
