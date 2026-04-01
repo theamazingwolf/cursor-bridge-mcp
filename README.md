@@ -2,7 +2,11 @@
 
 A local MCP server that gives Claude Code (and any MCP-compatible AI tool) native understanding of Cursor's context ecosystem — rules, agents, and skills.
 
-For teams where some developers use Cursor and others use Claude Code, Cursor Bridge makes a single set of context files work for everyone.
+## Why
+
+Most teams aren't all-in on one AI tool. Some developers prefer Cursor, others use Claude Code, and some switch between both depending on the task. But Cursor's context system — rules, agents, and skills — only works inside Cursor. Claude Code ignores `.cursor/` entirely and reads only `CLAUDE.md`.
+
+That leaves teams with a choice: maintain parallel context systems that drift apart, or pick one tool and lose the other's strengths. Cursor Bridge eliminates this by making Cursor's context files consumable by any MCP-compatible AI tool. Write your conventions once in `.cursor/rules/`, define your agents in `.cursor/agents/`, package your skills in `.cursor/skills/` — and every developer on the team gets the same context regardless of which tool they use.
 
 ## What It Does
 
@@ -14,16 +18,41 @@ Cursor Bridge reads `.cursor/rules/`, `.cursor/agents/`, and `.cursor/skills/`, 
 
 ## Installation
 
+### Option 1: Install from npm (once published)
+
+```bash
+npm install -g cursor-bridge-mcp
+```
+
+### Option 2: Install from GitHub
+
+```bash
+npm install -g github:theamazingwolf/cursor-bridge-mcp
+```
+
+### Option 3: Clone and build locally
+
+```bash
+git clone https://github.com/theamazingwolf/cursor-bridge-mcp.git
+cd cursor-bridge-mcp
+npm install
+npm run build
+npm link
+```
+
+## MCP Configuration
+
+After installing, add Cursor Bridge to your AI tool's MCP config.
+
 ### Claude Code
 
-Add to your MCP settings (`.claude/settings.json` or project-level):
+Add to `.claude/settings.json` (global) or `.claude/settings.local.json` (project):
 
 ```json
 {
   "mcpServers": {
     "cursor-bridge": {
-      "command": "npx",
-      "args": ["cursor-bridge-mcp"]
+      "command": "cursor-bridge-mcp"
     }
   }
 }
@@ -37,8 +66,20 @@ Add to `.cursor/mcp.json`:
 {
   "mcpServers": {
     "cursor-bridge": {
-      "command": "npx",
-      "args": ["cursor-bridge-mcp"]
+      "command": "cursor-bridge-mcp"
+    }
+  }
+}
+```
+
+If you haven't installed globally, use the full path to the built entry point instead:
+
+```json
+{
+  "mcpServers": {
+    "cursor-bridge": {
+      "command": "node",
+      "args": ["/path/to/cursor-bridge-mcp/dist/index.js"]
     }
   }
 }
