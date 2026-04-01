@@ -1,0 +1,29 @@
+{
+  "name": "cursor-bridge-mcp",
+  "version": "0.1.0",
+  "description": "MCP server that bridges Cursor's context ecosystem (rules, agents, skills) to Claude Code and other MCP-compatible tools",
+  "type": "module",
+  "bin": {
+    "cursor-bridge-mcp": "dist/index.js"
+  },
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx --watch src/index.ts",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "keywords": ["mcp", "cursor", "claude-code", "context", "rules"],
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "minimatch": "^10.0.1",
+    "yaml": "^2.7.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.2"
+  }
+}

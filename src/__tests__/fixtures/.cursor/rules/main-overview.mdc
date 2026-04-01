@@ -1,0 +1,9 @@
+---
+description: "Complete system overview and conventions"
+alwaysApply: true
+---
+
+# Main Overview
+
+This project follows standard TypeScript conventions.
+Always use strict mode and handle errors explicitly.

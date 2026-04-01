@@ -1,0 +1,184 @@
+# Cursor Bridge MCP
+
+A local MCP server that gives Claude Code (and any MCP-compatible AI tool) native understanding of Cursor's context ecosystem — rules, agents, and skills.
+
+For teams where some developers use Cursor and others use Claude Code, Cursor Bridge makes a single set of context files work for everyone.
+
+## What It Does
+
+Cursor Bridge reads `.cursor/rules/`, `.cursor/agents/`, and `.cursor/skills/`, applies Cursor's activation logic (glob matching, always-apply, description-based discovery), and serves the right context to any AI tool on demand.
+
+- **Rules** are routed intelligently — always-apply rules inject automatically, glob-matched rules activate based on the files you're working on, and description-matched rules surface when the task is relevant
+- **Agents** are served as loadable role instructions — when a task matches an agent's description, the AI can adopt that agent's behavioral guidance
+- **Skills** are served as on-demand knowledge packages — the AI browses the index and loads what it needs, including supporting scripts and references
+
+## Installation
+
+### Claude Code
+
+Add to your MCP settings (`.claude/settings.json` or project-level):
+
+```json
+{
+  "mcpServers": {
+    "cursor-bridge": {
+      "command": "npx",
+      "args": ["cursor-bridge-mcp"]
+    }
+  }
+}
+```
+
+### Cursor
+
+Add to `.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "cursor-bridge": {
+      "command": "npx",
+      "args": ["cursor-bridge-mcp"]
+    }
+  }
+}
+```
+
+## Tools
+
+### `get_active_rules`
+
+Returns rules that apply to your current files and/or task. This is the primary tool — call it when starting work or switching file context.
+
+```json
+{
+  "files": ["src/components/Button.tsx"],
+  "task_description": "Refactoring the button component"
+}
+```
+
+Rules are matched by activation mode:
+- **always** — `alwaysApply: true` rules are always included
+- **auto** — rules with `globs` patterns are included when files match
+- **agent-requested** — rules with no globs are included when the task description overlaps with the rule's description
+
+### `get_context_index`
+
+Returns a lightweight menu of all available rules, agents, and skills — descriptions only, no content. Use this to discover what's available.
+
+```json
+{
+  "types": ["rule", "agent", "skill"]
+}
+```
+
+### `get_rule`
+
+Fetches the full content of a specific rule by name.
+
+```json
+{ "name": "data-models-relationships" }
+```
+
+### `get_agent`
+
+Fetches the full definition of a Cursor agent — including its system prompt / instructions.
+
+```json
+{ "name": "security-auditor" }
+```
+
+### `get_skill`
+
+Fetches the full content of a skill package.
+
+```json
+{
+  "name": "pdf-processing",
+  "include_supporting_files": true
+}
+```
+
+### `get_skill_file`
+
+Fetches a specific supporting file from within a skill directory.
+
+```json
+{
+  "skill_name": "pdf-processing",
+  "file_path": "scripts/extract-text.py"
+}
+```
+
+## Cursor Context Formats
+
+### Rules (`.cursor/rules/`)
+
+Standard `.mdc` or `RULE.md` files with YAML frontmatter:
+
+```markdown
+---
+description: "React component conventions"
+globs: "src/components/**/*.tsx"
+alwaysApply: false
+---
+
+# Component Patterns
+
+Your conventions here...
+```
+
+Both `.mdc` files directly in the rules directory and `RULE.md` files in subdirectories are supported.
+
+### Agents (`.cursor/agents/`)
+
+Markdown files with agent metadata in frontmatter:
+
+```markdown
+---
+description: "Reviews code for security vulnerabilities"
+model: inherit
+readonly: true
+is_background: true
+---
+
+You are a security specialist...
+```
+
+### Skills (`.cursor/skills/`)
+
+Directory-based packages with a `SKILL.md` and optional `scripts/`, `references/`, `assets/` subdirectories:
+
+```
+.cursor/skills/pdf-processing/
+├── SKILL.md
+├── scripts/extract-text.py
+└── references/form-fields.md
+```
+
+## Configuration
+
+Optionally create `.cursor-bridge/config.yaml` to customize directory paths:
+
+```yaml
+rules_directory: ".cursor/rules"
+agents_directory: ".cursor/agents"
+skills_directory: ".cursor/skills"
+```
+
+All paths are relative to the workspace root. If no config file exists, the defaults above are used.
+
+## How It Works
+
+- **No file watchers** — the index rebuilds from disk on each tool call, parsing only YAML frontmatter (not full file content). This keeps every call fresh and avoids platform-specific reliability issues.
+- **Lazy content loading** — full markdown bodies are only read when a tool specifically needs them (e.g., `get_rule`, `get_active_rules` for matched rules). The index itself never loads content.
+- **No network access** — pure local file parsing. No AI calls, no external APIs.
+- **No code execution** — skill scripts are served as text content, never executed.
+
+## Development
+
+```bash
+npm install
+npm run build
+npm test
+```

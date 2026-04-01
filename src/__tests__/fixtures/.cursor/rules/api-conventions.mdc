@@ -1,0 +1,9 @@
+---
+description: "API route handler conventions and error handling patterns"
+globs: ["src/api/**", "src/middleware/**"]
+alwaysApply: false
+---
+
+# API Conventions
+
+All route handlers must validate input and return standardized error responses.

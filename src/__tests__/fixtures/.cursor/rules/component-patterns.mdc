@@ -1,0 +1,9 @@
+---
+description: "React component conventions for the design system"
+globs: "src/components/**/*.tsx"
+alwaysApply: false
+---
+
+# Component Patterns
+
+Use functional components with TypeScript interfaces for props.

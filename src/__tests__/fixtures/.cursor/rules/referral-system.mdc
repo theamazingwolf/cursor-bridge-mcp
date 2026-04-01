@@ -1,0 +1,8 @@
+---
+description: "Referral matching algorithm and state machine documentation"
+alwaysApply: false
+---
+
+# Referral System
+
+The referral matching engine uses a weighted scoring algorithm.
