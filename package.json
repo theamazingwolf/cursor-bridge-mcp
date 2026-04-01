@@ -13,7 +13,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsc && node esbuild.config.js",
+    "build": "npx tsc && node esbuild.config.js",
     "build:check": "tsc --noEmit",
     "prepare": "npm run build",
     "dev": "tsx --watch src/index.ts",
