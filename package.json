@@ -4,9 +4,9 @@
   "description": "MCP server that bridges Cursor's context ecosystem (rules, agents, skills) to Claude Code and other MCP-compatible tools",
   "type": "module",
   "bin": {
-    "cursor-bridge-mcp": "dist/index.js"
+    "cursor-bridge-mcp": "dist/index.cjs"
   },
-  "main": "dist/index.js",
+  "main": "dist/index.cjs",
   "files": [
     "dist",
     "README.md",
