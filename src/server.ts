@@ -9,7 +9,7 @@ import { parseFullFile } from './parser/frontmatter.js';
 export function createServer(workspaceRoot: string) {
   const server = new McpServer({
     name: 'cursor-bridge',
-    version: '0.1.0',
+    version: '0.1.1',
   });
 
   async function rebuildIndex(): Promise<ContextIndex> {
