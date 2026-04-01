@@ -7,15 +7,25 @@
     "cursor-bridge-mcp": "dist/index.js"
   },
   "main": "dist/index.js",
-  "files": ["dist", "README.md", "LICENSE"],
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
-    "build": "tsc",
-    "prepare": "npm run build",
+    "build": "tsc && node esbuild.config.js",
+    "build:check": "tsc --noEmit",
     "dev": "tsx --watch src/index.ts",
     "test": "vitest run",
     "test:watch": "vitest"
   },
-  "keywords": ["mcp", "cursor", "claude-code", "context", "rules"],
+  "keywords": [
+    "mcp",
+    "cursor",
+    "claude-code",
+    "context",
+    "rules"
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -28,15 +38,15 @@
   "engines": {
     "node": ">=18.0.0"
   },
-  "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.12.1",
-    "minimatch": "^10.0.1",
-    "yaml": "^2.7.1"
-  },
+  "dependencies": {},
   "devDependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
     "@types/node": "^22.15.3",
+    "esbuild": "^0.27.4",
+    "minimatch": "^10.0.1",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3",
-    "vitest": "^3.1.2"
+    "vitest": "^3.1.2",
+    "yaml": "^2.7.1"
   }
 }
