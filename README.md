@@ -16,15 +16,34 @@ Cursor Bridge reads `.cursor/rules/`, `.cursor/agents/`, and `.cursor/skills/`, 
 - **Agents** are served as loadable role instructions — when a task matches an agent's description, the AI can adopt that agent's behavioral guidance
 - **Skills** are served as on-demand knowledge packages — the AI browses the index and loads what it needs, including supporting scripts and references
 
-## Installation
+## Quick Start
 
-### From npm
+The fastest way to get running — no install needed:
+
+```json
+{
+  "mcpServers": {
+    "cursor-bridge": {
+      "command": "npx",
+      "args": ["cursor-bridge-mcp"]
+    }
+  }
+}
+```
+
+Add this to `.claude/settings.json` (Claude Code) or `.cursor/mcp.json` (Cursor). That's it — `npx` downloads and runs the latest version automatically.
+
+## Other Install Options
+
+### Install globally
 
 ```bash
 npm install -g cursor-bridge-mcp
 ```
 
-### From source
+Then use `"command": "cursor-bridge-mcp"` in your MCP config instead of `npx`.
+
+### Build from source
 
 ```bash
 git clone https://github.com/theamazingwolf/cursor-bridge-mcp.git
@@ -34,48 +53,14 @@ npm run build
 npm link
 ```
 
-This registers `cursor-bridge-mcp` as a global command on your PATH.
-
-## MCP Configuration
-
-After installing, add Cursor Bridge to your AI tool's MCP config.
-
-### Claude Code
-
-Add to `.claude/settings.json` (global) or `.claude/settings.local.json` (project):
-
-```json
-{
-  "mcpServers": {
-    "cursor-bridge": {
-      "command": "cursor-bridge-mcp"
-    }
-  }
-}
-```
-
-### Cursor
-
-Add to `.cursor/mcp.json`:
-
-```json
-{
-  "mcpServers": {
-    "cursor-bridge": {
-      "command": "cursor-bridge-mcp"
-    }
-  }
-}
-```
-
-If you haven't installed globally, use the full path to the built entry point instead:
+Then use `"command": "cursor-bridge-mcp"` in your MCP config, or point directly to the build:
 
 ```json
 {
   "mcpServers": {
     "cursor-bridge": {
       "command": "node",
-      "args": ["/path/to/cursor-bridge-mcp/dist/index.js"]
+      "args": ["/path/to/cursor-bridge-mcp/dist/index.cjs"]
     }
   }
 }
