@@ -1,0 +1,10 @@
+src/
+*.tsbuildinfo
+.cursor/
+.claude/
+.mcp.json
+docs/
+tasks/
+esbuild.config.js
+tsconfig.json
+CLAUDE.md
